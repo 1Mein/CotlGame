@@ -1,0 +1,65 @@
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('images/Keyart_ezalor.png') center/cover no-repeat;
+  }
+  
+  .tv-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .game-screen {
+    width: 50vw; /* 80% от ширины экрана */
+    height: 80vh; /* 80% от высоты экрана */
+    background-color: rgba(85, 150, 247, 0.795);
+    border: 20px solid #777;
+    border-radius: 15px;
+    margin-right: 40px;
+  }
+  
+  
+  .control-panel {
+    width: 80vw;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .table-container {
+    flex: 1;
+    height: 70vh;
+    overflow-y: auto;
+  }
+  
+  #results-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(255, 0, 0, 0.8);
+    border: 1px solid #555;
+    border-radius: 10px;
+  }
+  
+  #results-table th, #results-table td {
+    padding: 8px; /* Уменьшим отступы в ячейках */
+    text-align: center;
+    font-size: 14px; /* Уменьшим размер шрифта */
+  }
+  
+  .scroll-bar {
+    width: 8px; /* Уменьшим ширину скролл-бара */
+    height: 100%; 
+    background-color: rgba(43, 0, 255, 0.8);
+    border-radius: 5px;
+    overflow-y: auto; /* Добавим overflow-y для скроллинга */
+  }
+  
+  .current-damage{
+    color: coral;
+    display:flex;
+    justify-content: row;
+    justify-content: center;
+  }
