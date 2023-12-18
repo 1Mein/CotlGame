@@ -12,12 +12,15 @@
   }
   
   .game-screen {
-    width: 50vw; /* 80% от ширины экрана */
-    height: 80vh; /* 80% от высоты экрана */
+    /*width: 50vw;  80% от ширины экрана */
+    /*height: 80vh;  80% от высоты экрана */
+    width: 600px;
+    height: 600px;
     background-color: rgba(85, 150, 247, 0.795);
     border: 20px solid #777;
     border-radius: 15px;
     margin-right: 40px;
+    margin-left: 40px;
   }
   
   
@@ -27,6 +30,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-right:30px;
   }
   
   .table-container {
@@ -39,7 +43,7 @@
     width: 100%;
     border-collapse: collapse;
     background-color: rgba(255, 0, 0, 0.8);
-    border: 1px solid #555;
+    border: 5px solid #555;
     border-radius: 10px;
   }
   
@@ -57,9 +61,10 @@
     overflow-y: auto; /* Добавим overflow-y для скроллинга */
   }
   
-  .current-damage{
+  .current-damage-wrapper{
     color: coral;
     display:flex;
     justify-content: row;
     justify-content: center;
+    margin:0;
   }
