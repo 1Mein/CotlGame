@@ -19,6 +19,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
    
     //functions
+    function isCollision(rect, circ) {
+        const closestX = Math.max(rect.x, Math.min(circ.x, rect.x + rect.width));
+        const closestY = Math.max(rect.y, Math.min(circ.y, rect.y + rect.height));
+    
+        const distanceX = circ.x - closestX;
+        const distanceY = circ.y - closestY;
+        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+    
+        return distance < circ.radius;
+    }
+
+    
     function shoot(event) {
         //stop sum damage
         if(bullet.isFired){
@@ -42,7 +54,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             bullet.setFireTime();
             bullet.isFired = true;
-            
+
+            const centerX = bullet.x + bullet.width / 2;
+            const centerY = bullet.y + bullet.height/2;
+
+            bullet.startX1 = centerX + (bullet.width / 2) * Math.cos(bullet.angle+ Math.PI / 2);
+            bullet.startY1 = centerY + (bullet.width / 2) * Math.sin(bullet.angle+ Math.PI / 2);
+            bullet.startX2 = centerX + (-bullet.width / 2) * Math.cos(bullet.angle+ Math.PI / 2);
+            bullet.startY2 = centerY + (-bullet.width / 2) * Math.sin(bullet.angle+ Math.PI / 2);    
         }, 10); //NEED TEST
 
     }
@@ -59,6 +78,21 @@ document.addEventListener("DOMContentLoaded", function () {
             if (bullet.fireTime <= Date.now()) {    
                 bullet.x += Math.cos(bullet.angle) * bullet.speed;
                 bullet.y += Math.sin(bullet.angle) * bullet.speed;
+                
+                var isCol = isCollision({
+                    x:bullet.x + bullet.width / 2 , 
+                    y:bullet.y + bullet.height/2, 
+                    width: bullet.width,
+                    height: bullet.calculateDistance()},
+                    {
+                        x:bullet.x + bullet.width/2,
+                        y:bullet.y + bullet.height/2,
+                        radius: Math.sqrt(2)*enemy.width
+                    })
+                    
+                if(isCol){
+                    // console.log(isCol);
+                }
 
                 if (bullet.y < 0 || bullet.x < 0 || bullet.x > canvas.width || bullet.y > canvas.height) {
                     bullet.isFired = false;

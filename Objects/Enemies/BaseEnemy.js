@@ -13,5 +13,9 @@ export class Enemy{
 
     drawEnemy(ctx) {
         ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+
+        ctx.beginPath();
+        ctx.arc(this.x + this.width/2,this.y + this.height/2,1,0,2*Math.PI);
+        ctx.stroke()
     }
 }
