@@ -14,25 +14,33 @@
                 <canvas id="gameCanvas" width="600" height="600"></canvas>
             </div>
         </div>
-        <div class="control-panel">
-            <div class="table-container">
-                <table id="results-table">
-                    <thead>
-                        <tr>
-                            <th colspan="3">Scores</th>
-                        </tr>
-                        <tr>
-                            <th>Игрок</th>
-                        
-                            <th>Очки</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Ваши данные по счетам будут размещены здесь -->
-                    </tbody>
-                </table>
+        <div>
+            <div class="username">
+                <p>Your username:</p>
             </div>
-            <div class="scroll-bar"></div>
+            <form action="Php/setUser.php" class="username-set" method="post">
+                <input type="text" name="username">
+                <button type="submit" class="username-set-button">set</button>
+            </form>
+            <div class="control-panel">
+                <div class="table-container">
+                    <table id="results-table">
+                        <thead>
+                            <tr>
+                                <th colspan="3">Scores</th>
+                            </tr>
+                            <tr>
+                                <th>Игрок</th>
+                            
+                                <th>Очки</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Ваши данные по счетам будут размещены здесь -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     <!-- <script src="your-game-script.js"></script> -->
