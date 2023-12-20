@@ -19,6 +19,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
    
     //functions
+    function checkEllipseSegmentCollision(ellipseCenterX, ellipseCenterY, ellipseRadiusX, ellipseRadiusY, CurrX1, CurrY1, CurrX2, CurrY2, numChecks = 100) {
+        const dx = (CurrX2 - CurrX1) / numChecks;
+        const dy = (CurrY2 - CurrY1) / numChecks;
+
+        for (let i = 0; i <= numChecks; i++) {
+            const x = CurrX1 + i * dx;
+            const y = CurrY1 + i * dy;
+    
+            const dx_normalized = x - ellipseCenterX;
+            const dy_normalized = y - ellipseCenterY;
+    
+            if ((dx_normalized / ellipseRadiusX) ** 2 + (dy_normalized / ellipseRadiusY) ** 2 <= 1) {
+                return true; // Collised
+            }
+        }
+    
+        return false; // NotCollised
+    }
+
     
     function shoot(event) {
         //stop sum damage
@@ -64,7 +83,17 @@ document.addEventListener("DOMContentLoaded", function () {
         
 
         if (bullet.isFired) {
-            if (bullet.fireTime <= Date.now()) {    
+            if (bullet.fireTime <= Date.now()) {
+                const isCollis = checkEllipseSegmentCollision(
+                    enemy.x+enemy.width/2, enemy.y+enemy.height/2, 
+                    enemy.width/2, enemy.height/2, 
+                    bullet.currX1, bullet.currY1, 
+                    bullet.currX2, bullet.currY2);
+                
+                if (isCollis) {
+                    console.log('Коллизия!');
+                }
+
                 bullet.x += Math.cos(bullet.angle - Math.PI / 2) * bullet.speed;
                 bullet.y += Math.sin(bullet.angle - Math.PI / 2) * bullet.speed;
             }
