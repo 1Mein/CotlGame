@@ -39,40 +39,115 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     
+    // function shoot(event) {
+    //     //stop sum damage
+    //     if(bullet.isFired){
+    //         bullet.fireTime -=3000;
+    //         return;
+    //     }
+
+    //     //take position of click
+    //     const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+    //     const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+
+    //     const angle = Math.atan2(mouseY - hero.y, mouseX - (hero.x + hero.width / 2));
+        
+    //     setTimeout(() => {
+            
+    //         bullet.x = hero.x + hero.width/2 - bullet.width / 2;
+    //         bullet.y = hero.y; //MUST BE CHANGED!!!
+
+    //         bullet.angle= angle + Math.PI / 2;
+
+    //         bullet.setFireTime();
+    //         bullet.isFired = true;
+
+    //         const centerX = bullet.x + bullet.width / 2;
+    //         const centerY = bullet.y + bullet.height/2;
+
+    //         bullet.startX1 = centerX + (bullet.width / 2) * Math.cos(bullet.angle);
+    //         bullet.startY1 = centerY + (bullet.width / 2) * Math.sin(bullet.angle);
+    //         bullet.startX2 = centerX + (-bullet.width / 2) * Math.cos(bullet.angle);
+    //         bullet.startY2 = centerY + (-bullet.width / 2) * Math.sin(bullet.angle);    
+    //     }, 10); //NEED TEST
+
+    // }
+
+
+    let activeAbility = "nothing"; // По умолчанию ничего не активировано
+
     function shoot(event) {
-        //stop sum damage
-        if(bullet.isFired){
+        if (activeAbility === "nothing") {
+           
+        } 
+        else if(activeAbility === "charging"){
             bullet.fireTime -=3000;
             return;
         }
-
-        //take position of click
-        const mouseX = event.clientX - canvas.getBoundingClientRect().left;
-        const mouseY = event.clientY - canvas.getBoundingClientRect().top;
-
-
-        const angle = Math.atan2(mouseY - hero.y, mouseX - (hero.x + hero.width / 2));
-        
-        setTimeout(() => {
+        else if (activeAbility === "shoot") {
+            //take position of click
+            const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+            const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+    
+    
+            const angle = Math.atan2(mouseY - hero.y, mouseX - (hero.x + hero.width / 2));
             
-            bullet.x = hero.x + hero.width/2 - bullet.width / 2;
-            bullet.y = hero.y; //MUST BE CHANGED!!!
+            setTimeout(() => {
+                
+                bullet.x = hero.x + hero.width/2 - bullet.width / 2;
+                bullet.y = hero.y; //MUST BE CHANGED!!!
+    
+                bullet.angle= angle + Math.PI / 2;
+    
+                bullet.setFireTime();
+                bullet.isFired = true;
+    
+                const centerX = bullet.x + bullet.width / 2;
+                const centerY = bullet.y + bullet.height/2;
+    
+                bullet.startX1 = centerX + (bullet.width / 2) * Math.cos(bullet.angle);
+                bullet.startY1 = centerY + (bullet.width / 2) * Math.sin(bullet.angle);
+                bullet.startX2 = centerX + (-bullet.width / 2) * Math.cos(bullet.angle);
+                bullet.startY2 = centerY + (-bullet.width / 2) * Math.sin(bullet.angle);    
+            }, 10); //NEED TEST
 
-            bullet.angle= angle + Math.PI / 2;
+                activeAbility="charging";
 
-            bullet.setFireTime();
-            bullet.isFired = true;
+        } 
+        
+        else if (activeAbility === "secondAbility") {
+            // Логика для второй способности
+            // ...
 
-            const centerX = bullet.x + bullet.width / 2;
-            const centerY = bullet.y + bullet.height/2;
-
-            bullet.startX1 = centerX + (bullet.width / 2) * Math.cos(bullet.angle);
-            bullet.startY1 = centerY + (bullet.width / 2) * Math.sin(bullet.angle);
-            bullet.startX2 = centerX + (-bullet.width / 2) * Math.cos(bullet.angle);
-            bullet.startY2 = centerY + (-bullet.width / 2) * Math.sin(bullet.angle);    
-        }, 10); //NEED TEST
-
+            
+        }
     }
+    function secondAbility() {
+        const repulsionForce = 5; // Сила отталкивания
+
+    const enemyCenterX = enemy.x + enemy.width / 2; // X-координата центра врага
+    const enemyCenterY = enemy.y + enemy.height / 2; // Y-координата центра врага
+
+    // Рассчитываем вектор отталкивания от центра врага
+    const repulsionVectorX = enemyCenterX - canvas.width / 2;
+    const repulsionVectorY = enemyCenterY - canvas.height / 2;
+
+    // Нормализуем вектор отталкивания
+    const distance = Math.sqrt(repulsionVectorX ** 2 + repulsionVectorY ** 2);
+    const normalizedRepulsionVectorX = repulsionVectorX / distance;
+    const normalizedRepulsionVectorY = repulsionVectorY / distance;
+
+    // Применяем силу отталкивания к врагу
+    enemy.x += normalizedRepulsionVectorX * repulsionForce;
+    enemy.y += normalizedRepulsionVectorY * repulsionForce;
+
+
+    activeAbility="nothing";
+    }
+   
+    
+
 
     function updateGameArea() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -93,6 +168,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (isCollis) {
                     console.log('Коллизия!');
                 }
+                activeAbility="nothing";
+
 
                 bullet.x += Math.cos(bullet.angle - Math.PI / 2) * bullet.speed;
                 bullet.y += Math.sin(bullet.angle - Math.PI / 2) * bullet.speed;
@@ -107,7 +184,31 @@ document.addEventListener("DOMContentLoaded", function () {
         requestAnimationFrame(updateGameArea);
     }
 
-    document.addEventListener("mousedown", shoot);
+
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "q" && activeAbility == "nothing") {
+            activeAbility = "shoot"; // Переключение на способ стрельбы
+        
+        }
+        else if (event.key === "q" && activeAbility == "charging" ){
+            shoot(event);
+        }
+        else if (event.key === "w") {
+            activeAbility = "secondAbility"; // Переключение на вторую способность
+        }
+    });
+
+    document.addEventListener("mousedown", function(event) {
+        if (activeAbility === "nothing") {
+            // Логика, если ничего не активировано
+            // ...
+        } else if (activeAbility === "shoot") {
+            shoot(event);
+        } else if (activeAbility === "secondAbility") {
+            secondAbility();
+        }
+    });
+    
 
     updateGameArea();
 });
