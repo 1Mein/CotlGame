@@ -63,10 +63,21 @@
   
   .current-damage-wrapper{
     color: coral;
-    display:flex;
-    justify-content: row;
-    justify-content: center;
+    /* display:flex; */
+    /* justify-content:; */
+    /* justify-content: center; */
+    /* align-items:start; */
     margin:0;
+    text-align: left;
+  }
+  
+  .current-damage-text{
+    margin: 0;
+  }
+
+  .current-damage{
+    margin: 0;
+    /* text-align: center; */
   }
   
   .username{
