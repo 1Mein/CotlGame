@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
     function secondAbility() {
-        const repulsionForce = 5; // Сила отталкивания
+        const repulsionForce = 10; // Сила отталкивания
 
     const enemyCenterX = enemy.x + enemy.width / 2; // X-координата центра врага
     const enemyCenterY = enemy.y + enemy.height / 2; // Y-координата центра врага
