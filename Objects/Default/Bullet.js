@@ -8,7 +8,7 @@ export class Bullet{
         this.width = 150;
         this.height = 10;
         this.angle = 0;
-        this.speed = 0.5; // speed of bullet movement
+        this.speed = 3; // speed of bullet movement
         this.isFired = false;
         this.fireTime = 0; // when bullet will be fired
         this.color = "#FFF"; // color of bullet
