@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (bullet.isFired) {
             if (bullet.fireTime <= Date.now()) {
+                
                 const isCollis = checkEllipseSegmentCollision(
                     enemy.x+enemy.width/2, enemy.y+enemy.height/2, 
                     enemy.width/2, enemy.height/2, 
