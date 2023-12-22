@@ -1,5 +1,6 @@
 import { Enemy } from "/Objects/Enemies/BaseEnemy.js"
 import {Hero} from "/Objects/Default/Hero.js"
+import {BlindingLight} from "/Objects/Default/BlindingLight.js"
 import {Bullet} from "/Objects/Default/Bullet.js"
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -13,10 +14,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const enemy = new Enemy();
     const hero = new Hero();
     var bullet = new Bullet();
+    var light = new BlindingLight();
 
     //visuals
     const currentDamage = document.querySelector(".current-damage");
-
+    let sa;
    
     //functions
     function checkEllipseSegmentCollision(ellipseCenterX, ellipseCenterY, ellipseRadiusX, ellipseRadiusY, CurrX1, CurrY1, CurrX2, CurrY2, numChecks = 100) {
@@ -116,36 +118,55 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } 
         
-        else if (activeAbility === "secondAbility") {
-            // Логика для второй способности
-            // ...
-
+    }
+    function secondAbility(cursorX, cursorY, enemy) {
+        
+        const circleCenterX = cursorX; // X-координата центра круга
+        const circleCenterY = cursorY; // Y-координата центра круга
+    
+        const enemyCenterX = enemy.x + enemy.width / 2; // X-координата центра врага
+        const enemyCenterY = enemy.y + enemy.height / 2; // Y-координата центра врага
+    
+        // Рассчитываем расстояние между центром врага и центром круга
+        const distance = Math.sqrt((enemyCenterX - circleCenterX) ** 2 + (enemyCenterY - circleCenterY) ** 2);
+        light.x = cursorX;
+        light.y = cursorY;
+        light.animateLight(ctx);
+        // Проверяем, находится ли враг в пределах радиуса отталкивания
+        if (distance <= light.repulsionRadius) {
+            // Рассчитываем вектор от центра круга к центру врага
+            const repulsionVectorX = enemyCenterX - circleCenterX;
+            const repulsionVectorY = enemyCenterY - circleCenterY;
+    
+            // Нормализуем вектор отталкивания
+            const normalizedRepulsionVectorX = repulsionVectorX / distance;
+            const normalizedRepulsionVectorY = repulsionVectorY / distance;
+            
+           
+            // Применяем силу отталкивания с использованием анимации
+            animateRepulsion(enemy, normalizedRepulsionVectorX, normalizedRepulsionVectorY, light.repulsionForce);
             
         }
     }
-    function secondAbility() {
-        const repulsionForce = 5; // Сила отталкивания
-
-    const enemyCenterX = enemy.x + enemy.width / 2; // X-координата центра врага
-    const enemyCenterY = enemy.y + enemy.height / 2; // Y-координата центра врага
-
-    // Рассчитываем вектор отталкивания от центра врага
-    const repulsionVectorX = enemyCenterX - canvas.width / 2;
-    const repulsionVectorY = enemyCenterY - canvas.height / 2;
-
-    // Нормализуем вектор отталкивания
-    const distance = Math.sqrt(repulsionVectorX ** 2 + repulsionVectorY ** 2);
-    const normalizedRepulsionVectorX = repulsionVectorX / distance;
-    const normalizedRepulsionVectorY = repulsionVectorY / distance;
-
-    // Применяем силу отталкивания к врагу
-    enemy.x += normalizedRepulsionVectorX * repulsionForce;
-    enemy.y += normalizedRepulsionVectorY * repulsionForce;
-
-
-    activeAbility="nothing";
+    
+    function animateRepulsion(enemy, repulsionVectorX, repulsionVectorY, repulsionForce) {
+        const animationFrames = 60; // Количество кадров анимации
+        let currentFrame = 0;
+    
+        function animate() {
+            if (currentFrame < animationFrames) {
+                // Интерполируем позицию врага с использованием анимации
+                enemy.x += (repulsionVectorX * repulsionForce) / animationFrames;
+                enemy.y += (repulsionVectorY * repulsionForce) / animationFrames;
+    
+                currentFrame++;
+                requestAnimationFrame(animate);
+            }
+        }
+    
+        animate();
     }
-   
+    
     
 
 
@@ -153,13 +174,13 @@ document.addEventListener("DOMContentLoaded", function () {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         hero.drawHero(ctx);
         enemy.drawEnemy(ctx);
+       
         bullet.drawBullet(ctx);
         
         
 
         if (bullet.isFired) {
             if (bullet.fireTime <= Date.now()) {
-                
                 const isCollis = checkEllipseSegmentCollision(
                     enemy.x+enemy.width/2, enemy.y+enemy.height/2, 
                     enemy.width/2, enemy.height/2, 
@@ -193,20 +214,23 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         else if (event.key === "q" && activeAbility == "charging" ){
             shoot(event);
+            
         }
         else if (event.key === "w") {
-            activeAbility = "secondAbility"; // Переключение на вторую способность
+            
+            sa = true;
+            
         }
     });
 
     document.addEventListener("mousedown", function(event) {
-        if (activeAbility === "nothing") {
-            // Логика, если ничего не активировано
-            // ...
-        } else if (activeAbility === "shoot") {
+        if (activeAbility === "shoot") {
             shoot(event);
-        } else if (activeAbility === "secondAbility") {
-            secondAbility();
+        } else if (sa) {
+            const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+            const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+            secondAbility(mouseX, mouseY, enemy);
+            sa = false;
         }
     });
     
