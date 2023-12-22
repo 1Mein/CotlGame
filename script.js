@@ -96,9 +96,15 @@ document.addEventListener("DOMContentLoaded", function () {
         } 
         else if(activeAbility === "charging"){
             bullet.fireTime -=3000;
-            return;
+            // console.log(bullet.lastTimeUsed);
+            // console.log("////");
+            
+            bullet.lastTimeUsed = new Date().getTime();
+            
+            
+            return; 
         }
-        else if (activeAbility === "shoot") {
+        else if (activeAbility === "shoot" && bullet.isAbilityReady()) {
             //take position of click
             const mouseX = event.clientX - canvas.getBoundingClientRect().left;
             const mouseY = event.clientY - canvas.getBoundingClientRect().top;
@@ -131,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
     }
     function secondAbility(cursorX, cursorY, enemy) {
-        
+        if(light.isAbilityReady()){
         const circleCenterX = cursorX; // X-координата центра круга
         const circleCenterY = cursorY; // Y-координата центра круга
     
@@ -157,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Применяем силу отталкивания с использованием анимации
             animateRepulsion(enemy, normalizedRepulsionVectorX, normalizedRepulsionVectorY, light.repulsionForce);
             
-        }
+        }}
     }
     
     function animateRepulsion(enemy, repulsionVectorX, repulsionVectorY, repulsionForce) {
