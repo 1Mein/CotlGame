@@ -93,3 +93,26 @@
   .username-set-button{
     margin-left: 15px;
   }
+
+  .info-wrapper{
+    margin: 0 40px 10px;
+    color: coral;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .current-score-text{
+    margin: 0;
+  }
+
+  .current-score{
+    margin: 0;
+  }
+
+  .timer-text{
+    margin: 0;
+  }
+
+  .timer{
+    margin: 0;
+  }

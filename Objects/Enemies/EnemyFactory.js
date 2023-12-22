@@ -1,15 +1,17 @@
 // EnemyFactory.js
 import { AntiMage } from './AntiMage.js';
 import { Riki } from './Riki.js';
+import {Enemy} from './BaseEnemy.js';
 
 export class EnemyFactory {
-    createEnemy(enemyType, gameWidth, gameHeight) {
+    createEnemy(enemyType) {
         switch (enemyType) {
             case 'AntiMage':
-                return new AntiMage(gameWidth, gameHeight);
+                return new AntiMage();
             case 'Riki':
-                return new Riki(gameWidth, gameHeight);
-            // Add more cases for other enemy types as needed
+                return new Riki();
+            case 'Creep':
+                return new Enemy();
             default:
                 throw new Error(`Unknown enemy type: ${enemyType}`);
         }

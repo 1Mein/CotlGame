@@ -9,12 +9,27 @@
 <body>
     <div class="tv-container">
         <div>
-            <div class="current-damage-wrapper"><p class="current-damage-text">Current damage:</p><p class="current-damage">Create bullet</p></div>
+            <div class="info-wrapper">
+                <div class="current-damage-wrapper">
+                    <p class="current-damage-text">Current damage:</p>
+                    <p class="current-damage">Shoot</p>
+                </div>
+                <div class="timer-wrapper">
+                    <p class="timer-text">Time left</p>
+                    <p class="timer">60 sec</p>
+                </div>
+                <div class="current-score-wrapper">
+                    <p class="current-score-text">Current score:</p>
+                    <p class="current-score">0</p>
+                </div>
+            </div>
             <!-- <h1 class="current-damage-wrapper"><p>Current damage:</p></h1> -->
 
             <div class="game-screen">
                 <canvas id="gameCanvas" width="600" height="600"></canvas>
             </div>
+
+
         </div>
         <div>
             <div class="username">

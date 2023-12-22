@@ -1,6 +1,7 @@
 import { Enemy } from "/Objects/Enemies/BaseEnemy.js"
 import {Hero} from "/Objects/Default/Hero.js"
 import {Bullet} from "/Objects/Default/Bullet.js"
+import { EnemyFactory } from "./Objects/Enemies/EnemyFactory.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -8,16 +9,25 @@ document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    
+    //enemies
+    let enemies = ['AntiMage','Riki','Creep']
+
     //objects
-    const enemy = new Enemy();
+    let enemy = new EnemyFactory().createEnemy(enemies[Math.floor(Math.random() * enemies.length)]);
     const hero = new Hero();
-    var bullet = new Bullet();
+    let bullet = new Bullet();
 
     //visuals
     const currentDamage = document.querySelector(".current-damage");
+    const currentScore = document.querySelector(".current-score");
+    const timerValue = document.querySelector(".timer");
 
-   
+    //variables
+    let score = 0;
+    let curDamage = 0;
+    let timeLeft =60;
+    let collised = false;
+
     //functions
     function checkEllipseSegmentCollision(ellipseCenterX, ellipseCenterY, ellipseRadiusX, ellipseRadiusY, CurrX1, CurrY1, CurrX2, CurrY2, numChecks = 100) {
         const dx = (CurrX2 - CurrX1) / numChecks;
@@ -168,6 +178,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 
                 if (isCollis) {
                     console.log('Коллизия!');
+                    score +=curDamage;
+                    currentScore.innerHTML = score;
+                    enemy = new EnemyFactory().createEnemy(enemies[Math.floor(Math.random() * enemies.length)]);
                 }
                 activeAbility="nothing";
 
@@ -177,8 +190,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             else{
                 var countedTime = 3000-bullet.fireTime + Date.now();
-                currentDamage.innerHTML = Math.ceil(countedTime/100)*10;
+                curDamage = Math.ceil(countedTime/100)*10;
+                currentDamage.innerHTML = curDamage;
             }
+        }
+        else{
+            currentDamage.innerHTML = 'Shoot';
         }
         
 
@@ -210,6 +227,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
     
+    setInterval(() => {
+        timeLeft--;
+        timerValue.textContent = timeLeft + ' sec';
+    
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            alert("Время вышло!");
+        }
+    }, 1000);
 
     updateGameArea();
 });
