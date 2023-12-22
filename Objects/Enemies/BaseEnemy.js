@@ -1,6 +1,6 @@
 export class Enemy {
     constructor() {
-        this.moveSpeed = 1; // Adjust the speed as needed
+        this.moveSpeed = 0; // Adjust the speed as needed
         this.width = 50;
         this.height = 50;
         this.x = Math.floor(Math.random() * 600 - this.width);

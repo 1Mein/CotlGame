@@ -5,6 +5,12 @@ export class Bullet{
         this.gv = new GlobalVariables();
         this.x = 0;
         this.y = 0;
+
+        this.cooldown= 2000;//cooldown skill` 
+        this.lastTimeUsed = 0;
+
+
+
         this.width = 150;
         this.height = 10;
         this.angle = 0;
@@ -27,6 +33,13 @@ export class Bullet{
     setFireTime(){
         this.fireTime = Date.now() + 3000; //3 seconds can wait for bullet to fire
     }
+    isAbilityReady() {
+        // Check if enough time has passed since the last time the ability was used
+        const currentTime = new Date().getTime();
+        
+        console.log(currentTime - this.lastTimeUsed >= this.cooldown)
+        return currentTime - this.lastTimeUsed >= this.cooldown;
+    }
 
     calculateDistance(){
         const distance = Math.sqrt((this.startX1 - this.currX1)*(this.startX1 - this.currX1) + (this.startY1 - this.currY1)*(this.startY1 - this.currY1));
@@ -35,7 +48,7 @@ export class Bullet{
 
     drawBullet(ctx){
         if(!this.isFired) return;
-
+        //this.lastTimeUsed = new Date().getTime();
         ctx.fillStyle = this.color;
 
         ctx.save();
