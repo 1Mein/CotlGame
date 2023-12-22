@@ -1,13 +1,14 @@
-import { GlobalVariables } from "../GlobalVariables.js";
 
-export class BlindingLight{
+
+export class BlindingLight {
     constructor() {
         this.repulsionForce = 100;
         this.repulsionRadius = 100;
         this.lightRadius = 5;  // Initial radius of the light
         this.x = 0;
         this.y = 0;
-
+        this.cooldown = 5000;  // Cooldown time in milliseconds (5 seconds in this example)
+        this.lastTimeUsed = 0;  // Timestamp of the last time the ability was used
     }
 
     drawLight(ctx) {
@@ -22,19 +23,30 @@ export class BlindingLight{
         ctx.closePath();
     }
 
+    isAbilityReady() {
+        // Check if enough time has passed since the last time the ability was used
+        const currentTime = new Date().getTime();
+        return currentTime - this.lastTimeUsed >= this.cooldown;
+    }
+
     animateLight(ctx) {
-        // Assuming you have an animation loop or timer
-        // Example: requestAnimationFrame, setInterval, etc.
         const animateFrame = () => {
             // Clear the canvas or update it as needed
             // ...
 
-            // Draw the light
-            this.drawLight(ctx);
+            // Check if the ability is ready to be used
             if(this.lightRadius >= this.repulsionRadius){
                 this.lightRadius = 0;
                 return;
-            }
+            }   
+                // Draw the light
+                
+                this.drawLight(ctx);
+                
+                // Update the timestamp of the last time the ability was used
+                this.lastTimeUsed = new Date().getTime();
+                
+
             // Continue the animation loop
             requestAnimationFrame(animateFrame);
         };
