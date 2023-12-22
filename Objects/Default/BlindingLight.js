@@ -19,7 +19,7 @@ export class BlindingLight{
         ctx.arc(this.x, this.y, this.lightRadius, 0, 2 * Math.PI);
         ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';  // Adjust color and transparency as needed
         ctx.fill();
-         ctx.closePath();
+        ctx.closePath();
     }
 
     animateLight(ctx) {
@@ -43,5 +43,12 @@ export class BlindingLight{
         animateFrame();
     }
 
-    
+    drawRange(ctx,cursorX,cursorY){
+        ctx.beginPath();
+        ctx.arc(cursorX, cursorY, this.repulsionRadius, 0, 2 * Math.PI);
+        ctx.strokeStyle = 'rgba(0, 255, 0, 0.8)';  // Adjust color and transparency as needed
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
+    }
 }

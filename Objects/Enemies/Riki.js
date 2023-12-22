@@ -2,22 +2,22 @@ import { GlobalVariables } from '../GlobalVariables.js';
 import { Enemy } from './BaseEnemy.js';
 
 export class Riki extends Enemy {
-    constructor(gameWidth, gameHeight) {
+    constructor() {
         super();
         this.enemyName = 'Riki';
         this.image.src = "Images/riki.jpg";
         this.invisible = false;
 
-        this.activateInvisibility();
+        this.disableInvisibility();
     }
 
     activateInvisibility() {
-        this.invisible = !this.invisible;
+        this.invisible = true;
         setTimeout(() => this.disableInvisibility(), 1000);
     }
 
     disableInvisibility() {
-        this.invisible = !this.invisible;
+        this.invisible = false;
         setTimeout(() => this.activateInvisibility(), 4000);   
     }
         
