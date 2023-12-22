@@ -3,6 +3,7 @@ import {Hero} from "/Objects/Default/Hero.js"
 import {BlindingLight} from "/Objects/Default/BlindingLight.js"
 import {Bullet} from "/Objects/Default/Bullet.js"
 import { EnemyFactory } from "./Objects/Enemies/EnemyFactory.js";
+import { Button } from "./Objects/Default/Button.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const hero = new Hero();
     let bullet = new Bullet();
     let light = new BlindingLight();
+    let buttons = new Button();
 
     //visuals
     const currentDamage = document.querySelector(".current-damage");
@@ -27,10 +29,12 @@ document.addEventListener("DOMContentLoaded", function () {
     //variables
     let score = 0;
     let curDamage = 0;
-    let timeLeft =60;
-    let collised = false;
-    let sa;
-   
+    let sa = false;
+    let gameStarted = false;
+    let gameEnded = false;
+    let timer;
+    let mouseX, mouseY;
+
     //functions
     function checkEllipseSegmentCollision(ellipseCenterX, ellipseCenterY, ellipseRadiusX, ellipseRadiusY, CurrX1, CurrY1, CurrX2, CurrY2, numChecks = 100) {
         const dx = (CurrX2 - CurrX1) / numChecks;
@@ -51,44 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return false; // NotCollised
     }
 
-    
-    // function shoot(event) {
-    //     //stop sum damage
-    //     if(bullet.isFired){
-    //         bullet.fireTime -=3000;
-    //         return;
-    //     }
-
-    //     //take position of click
-    //     const mouseX = event.clientX - canvas.getBoundingClientRect().left;
-    //     const mouseY = event.clientY - canvas.getBoundingClientRect().top;
-
-
-    //     const angle = Math.atan2(mouseY - hero.y, mouseX - (hero.x + hero.width / 2));
-        
-    //     setTimeout(() => {
-            
-    //         bullet.x = hero.x + hero.width/2 - bullet.width / 2;
-    //         bullet.y = hero.y; //MUST BE CHANGED!!!
-
-    //         bullet.angle= angle + Math.PI / 2;
-
-    //         bullet.setFireTime();
-    //         bullet.isFired = true;
-
-    //         const centerX = bullet.x + bullet.width / 2;
-    //         const centerY = bullet.y + bullet.height/2;
-
-    //         bullet.startX1 = centerX + (bullet.width / 2) * Math.cos(bullet.angle);
-    //         bullet.startY1 = centerY + (bullet.width / 2) * Math.sin(bullet.angle);
-    //         bullet.startX2 = centerX + (-bullet.width / 2) * Math.cos(bullet.angle);
-    //         bullet.startY2 = centerY + (-bullet.width / 2) * Math.sin(bullet.angle);    
-    //     }, 10); //NEED TEST
-
-    // }
-
-
-    let activeAbility = "nothing"; // По умолчанию ничего не активировано
+    let activeAbility = "nothing"; // default is nothing active
 
     function shoot(event) {
         if (activeAbility === "nothing") {
@@ -131,48 +98,41 @@ document.addEventListener("DOMContentLoaded", function () {
                 bullet.startY2 = centerY + (-bullet.width / 2) * Math.sin(bullet.angle);    
             }, 10); //NEED TEST
 
-                activeAbility="charging";
-
+            activeAbility="charging";
         } 
         
     }
     function secondAbility(cursorX, cursorY, enemy) {
+
         if(light.isAbilityReady()){
         const circleCenterX = cursorX; // X-координата центра круга
         const circleCenterY = cursorY; // Y-координата центра круга
     
-        const enemyCenterX = enemy.x + enemy.width / 2; // X-координата центра врага
-        const enemyCenterY = enemy.y + enemy.height / 2; // Y-координата центра врага
-    
-        // Рассчитываем расстояние между центром врага и центром круга
+        const enemyCenterX = enemy.x + enemy.width / 2;
+        const enemyCenterY = enemy.y + enemy.height / 2;
         const distance = Math.sqrt((enemyCenterX - circleCenterX) ** 2 + (enemyCenterY - circleCenterY) ** 2);
         light.x = cursorX;
         light.y = cursorY;
         light.animateLight(ctx);
-        // Проверяем, находится ли враг в пределах радиуса отталкивания
+
         if (distance <= light.repulsionRadius) {
-            // Рассчитываем вектор от центра круга к центру врага
             const repulsionVectorX = enemyCenterX - circleCenterX;
             const repulsionVectorY = enemyCenterY - circleCenterY;
     
-            // Нормализуем вектор отталкивания
             const normalizedRepulsionVectorX = repulsionVectorX / distance;
             const normalizedRepulsionVectorY = repulsionVectorY / distance;
             
-           
-            // Применяем силу отталкивания с использованием анимации
             animateRepulsion(enemy, normalizedRepulsionVectorX, normalizedRepulsionVectorY, light.repulsionForce);
             
         }}
     }
     
     function animateRepulsion(enemy, repulsionVectorX, repulsionVectorY, repulsionForce) {
-        const animationFrames = 60; // Количество кадров анимации
+        const animationFrames = 60;
         let currentFrame = 0;
     
         function animate() {
             if (currentFrame < animationFrames) {
-                // Интерполируем позицию врага с использованием анимации
                 enemy.x += (repulsionVectorX * repulsionForce) / animationFrames;
                 enemy.y += (repulsionVectorY * repulsionForce) / animationFrames;
     
@@ -188,12 +148,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     function updateGameArea() {
+        if(!gameStarted){
+            buttons.createStartButton(ctx);
+            requestAnimationFrame(updateGameArea);
+            return;
+        }   
+        else if(gameStarted && gameEnded){
+            buttons.createLabel(ctx,score);
+            buttons.createRestartButton(ctx);            
+            requestAnimationFrame(updateGameArea);
+            return;
+        }
+
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         hero.drawHero(ctx);
         enemy.drawEnemy(ctx);
-       
         bullet.drawBullet(ctx);
-        
+        if(sa && mouseX !== undefined && mouseY !== undefined){
+            light.drawRange(ctx,mouseX,mouseY); 
+        }
+        else if(activeAbility === "shoot" && mouseX !== undefined && mouseY !== undefined){
+            bullet.drawRange(ctx,hero.x + hero.width/2,hero.y,mouseX,mouseY);
+        }
         
 
         if (bullet.isFired) {
@@ -232,41 +209,74 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     document.addEventListener("keydown", function(event) {
-        if (event.key === "q" && activeAbility == "nothing") {
-            activeAbility = "shoot"; // Переключение на способ стрельбы
-        
+        if(!gameStarted || (gameStarted && gameEnded)){
+            return;
         }
-        else if (event.key === "q" && activeAbility == "charging" ){
+
+        if (event.key === "q" && activeAbility === "nothing") {
+            activeAbility = "shoot"; 
+            sa = false;
+        }
+        else if (event.key === "q" && activeAbility === "charging" ){
             shoot(event);
-            
+            sa = false;
         }
         else if (event.key === "w") {
-            
+            if(activeAbility === "shoot"){
+                activeAbility = "nothing";
+            }
             sa = true;
-            
         }
     });
 
     document.addEventListener("mousedown", function(event) {
+        const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+        const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+        if(!gameStarted || (gameStarted && gameEnded)){
+            if(buttons.isButtonClicked(mouseX,mouseY)){
+                gameStarted = true;
+                gameEnded = false;
+
+                enemy = new EnemyFactory().createEnemy(enemies[Math.floor(Math.random() * enemies.length)]);
+                score = 0;
+                curDamage = 0;
+                currentScore.innerHTML = 0;
+                bullet.isFired = false;
+                sa = false;
+                timerValue.innerHTML = 60;
+
+                startTimer(10);
+            }
+            return;
+        }
+
         if (activeAbility === "shoot") {
             shoot(event);
         } else if (sa) {
-            const mouseX = event.clientX - canvas.getBoundingClientRect().left;
-            const mouseY = event.clientY - canvas.getBoundingClientRect().top;
             secondAbility(mouseX, mouseY, enemy);
             sa = false;
         }
     });
     
-    setInterval(() => {
-        timeLeft--;
-        timerValue.textContent = timeLeft + ' sec';
+    document.addEventListener('mousemove', function(event) {
+        mouseX = event.clientX - canvas.getBoundingClientRect().left;
+        mouseY = event.clientY - canvas.getBoundingClientRect().top;
+    });
     
-        if (timeLeft <= 0) {
-            clearInterval(timer);
-            alert("Время вышло!");
-        }
-    }, 1000);
+
+    function startTimer(duration) {
+        let timeLeft = duration;
+        timer = setInterval(() => {
+            timeLeft--;
+            timerValue.textContent = timeLeft + ' sec';
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                gameEnded = true;
+            }
+        }, 1000);
+    }
 
     updateGameArea();
 });

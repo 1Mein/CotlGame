@@ -54,4 +54,13 @@ export class BlindingLight {
         // Start the animation loop
         animateFrame();
     }
+
+    drawRange(ctx,cursorX,cursorY){
+        ctx.beginPath();
+        ctx.arc(cursorX, cursorY, this.repulsionRadius, 0, 2 * Math.PI);
+        ctx.strokeStyle = 'rgba(0, 255, 0, 0.8)';  // Adjust color and transparency as needed
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
+    }
 }

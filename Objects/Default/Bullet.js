@@ -70,31 +70,11 @@ export class Bullet{
         const centerX = this.x + this.width / 2;
         const centerY = this.y + this.height/2;
 
-        ctx.beginPath();
-        ctx.arc(centerX,centerY,1,0,2*Math.PI);
-        ctx.stroke();
-
-
         this.currX1 = centerX + (this.width / 2) * Math.cos(this.angle);
         this.currY1 = centerY + (this.width / 2) * Math.sin(this.angle);
 
-        ctx.beginPath();
-        ctx.arc(this.currX1,this.currY1,1,0,2*Math.PI);
-        ctx.stroke();
-
         this.currX2 = centerX + (-this.width / 2) * Math.cos(this.angle);
         this.currY2 = centerY + (-this.width / 2) * Math.sin(this.angle);
-
-        ctx.beginPath();
-        ctx.arc(this.currX2,this.currY2,1,0,2*Math.PI);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(this.startX1,this.startY1,1,0,2*Math.PI);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(this.startX2,this.startY2,1,0,2*Math.PI);
-        ctx.stroke();
     }
 
 
@@ -125,6 +105,18 @@ export class Bullet{
         if(counter === 4){
             this.isFired = false;
         }
+    }
+
+    
+    drawRange(ctx,startX,startY,cursorX,cursorY){
+        ctx.beginPath();
+        ctx.moveTo(startX,startY);
+        ctx.lineTo(cursorX, cursorY);
+
+        ctx.strokeStyle = 'rgba(0, 255, 0, 0.8)'
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();    
     }
 }
 
