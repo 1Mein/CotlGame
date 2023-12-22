@@ -4,6 +4,7 @@ import {BlindingLight} from "/Objects/Default/BlindingLight.js"
 import {Bullet} from "/Objects/Default/Bullet.js"
 import { EnemyFactory } from "./Objects/Enemies/EnemyFactory.js";
 import { Button } from "./Objects/Default/Button.js";
+import {Abilities} from "./Objects/Default/Abilities.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let bullet = new Bullet();
     let light = new BlindingLight();
     let buttons = new Button();
+    const abilties = new Abilities();
 
     //visuals
     const currentDamage = document.querySelector(".current-damage");
@@ -160,8 +162,10 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-
+        
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        abilties.firstSpell(ctx,false);
+        abilties.secondSpell(ctx);
         hero.drawHero(ctx);
         enemy.drawEnemy(ctx);
         bullet.drawBullet(ctx);
@@ -192,8 +196,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 bullet.x += Math.cos(bullet.angle - Math.PI / 2) * bullet.speed;
                 bullet.y += Math.sin(bullet.angle - Math.PI / 2) * bullet.speed;
+                abilties.firstSpell(ctx,false);
             }
             else{
+                abilties.firstSpell(ctx,true);
                 var countedTime = 3000-bullet.fireTime + Date.now();
                 curDamage = Math.ceil(countedTime/100)*10;
                 currentDamage.innerHTML = curDamage;
