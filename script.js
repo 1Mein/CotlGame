@@ -279,9 +279,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (timeLeft <= 0) {
                 clearInterval(timer);
+                sendResults();
                 gameEnded = true;
             }
         }, 1000);
+    }
+
+    function sendResults(){
+        fetch('Php/saveResult.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'score=' + score
+        })
     }
 
     updateGameArea();

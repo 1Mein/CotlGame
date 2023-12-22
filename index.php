@@ -1,3 +1,6 @@
+<?php 
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +35,14 @@
         </div>
         <div>
             <div class="username">
-                <p>Your username:</p>
+                <p>Your username: <?php 
+                if(isset($_SESSION["username"]))
+                {
+                    echo $_SESSION["username"];
+                }
+                else{
+                    echo "";
+                }?></p>
             </div>
             <form action="Php/setUser.php" class="username-set" method="post">
                 <input type="text" name="username">
@@ -52,7 +62,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Ваши данные по счетам будут размещены здесь -->
+                            <?php
+                                include('Php/getLeaders.php');
+                            ?>
                         </tbody>
                     </table>
                 </div>
