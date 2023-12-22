@@ -252,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 sa = false;
                 timerValue.innerHTML = 60;
 
-                startTimer(10);
+                startTimer(60);
             }
             return;
         }

@@ -48,6 +48,12 @@
                 <input type="text" name="username">
                 <button type="submit" class="username-set-button">set</button>
             </form>
+            <form action="Php/setSubscribe.php" method="post">
+                <label for="subscribe" class="notify-text">Notify leader changes</label>
+                <input type="checkbox" name="subscribe" class="subscribe" id = "subscribe">
+                <button type="submit">Set</button>
+            </form>
+            <p class="notify">Notify: <?php include('Php/notification.php') ?></p>
             <div class="control-panel">
                 <div class="table-container">
                     <table id="results-table">

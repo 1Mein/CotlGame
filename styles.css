@@ -88,6 +88,7 @@
   .username-set{
     display:flex;
     justify-content: row;
+    margin-bottom: 30px;
   }
 
   .username-set-button{
@@ -121,3 +122,9 @@
     border: 1px solid black;
     border-collapse: collapse;
 }
+
+
+.notify-text{
+  background-color: bisque;
+}
+
