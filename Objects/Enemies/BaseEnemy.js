@@ -2,13 +2,15 @@ export class Enemy {
     constructor() {
         this.x = Math.floor(Math.random() * 550);
         this.y = Math.floor(Math.random() * 400);
-        this.moveSpeed = 1; // Adjust the speed as needed
+        this.moveSpeed = 0; // Adjust the speed as needed
         this.width = 50;
         this.height = 50;
         this.image = new Image();
         this.image.src = "Images/creep1.jpg";
         this.direction = Math.random() * 360; // Initial random direction in degrees
         this.timerSetDir = 0;
+        this.velocityX = 0; // Ensure it is initialized with a numerical value
+        this.velocityY = 0;
     }
 
     drawEnemy(ctx) {
