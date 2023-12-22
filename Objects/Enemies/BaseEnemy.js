@@ -9,6 +9,8 @@ export class Enemy {
         this.image.src = "Images/creep1.jpg";
         this.direction = Math.random() * 360;
         this.timerSetDir = 0;
+        this.velocityX = 0; // Ensure it is initialized with a numerical value
+        this.velocityY = 0;
     }
 
     drawEnemy(ctx) {
