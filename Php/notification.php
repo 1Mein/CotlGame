@@ -9,14 +9,13 @@ else{
     return;
 }
 
-$user = $connection->query("SELECT * FROM leaderboard.users where username = '$username'");
+$user = $connection->query("SELECT * FROM users where username = '$username'");
 $subscribe = $user->fetch_assoc();
-
-$query = $connection->query("SELECT username,score FROM leaderboard.users order by score  desc limit 1");
+$query = $connection->query("SELECT * FROM users order by score desc limit 1");
 if ($query !== false) {
     while ($row = $query->fetch_assoc()) {
-        if($row["score"] > 1000 && $subscribe["subscribe"]){
-            echo $row["username"]." reached more than 1000 points at ".$subscribe["date"];
+        if($row["score"] > 800 && $subscribe["subscribe"]){
+            echo $row["username"]." reached more than 1000 points at ".$row["date"];
         }
     }
 }

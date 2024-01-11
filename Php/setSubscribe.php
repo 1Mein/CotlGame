@@ -7,9 +7,9 @@ if (isset($_SESSION["username"])){
 }
 
 if(isset($_POST["subscribe"])){
-    $query = $connection->query("UPDATE leaderboard.users SET subscribe = true WHERE username = '{$username}'");
+    $query = $connection->query("UPDATE users SET subscribe = true WHERE username = '{$username}'");
 }
 else{
-    $query = $connection->query("UPDATE leaderboard.users SET subscribe = false WHERE username = '{$username}'");
+    $query = $connection->query("UPDATE users SET subscribe = false WHERE username = '{$username}'");
 }
 header("Location:../index.php");

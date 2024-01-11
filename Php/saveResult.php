@@ -9,6 +9,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $score = $_POST['score'];
     $username = $_SESSION["username"];
 
-    $query = $connection->query("UPDATE leaderboard.users SET score = {$score},date = NOW() WHERE username = '{$username}'");
+    $query = $connection->query("UPDATE users SET score = {$score},date = NOW() WHERE username = '{$username}'");
 }
 ?>
