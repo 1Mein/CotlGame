@@ -3,6 +3,10 @@ session_start();
 require_once('./connection.php');
 $username = "";
 if (isset($_POST["username"])){
+    if(!$_POST["username"]){
+        header("Location:../index.php");
+        exit();
+    }
     $_SESSION["username"] = $_POST["username"];
     $username = $_POST["username"];
 }

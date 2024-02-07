@@ -219,15 +219,20 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        if (event.key === "q" && activeAbility === "nothing") {
+        
+        if (event.key === "Escape") {
+            activeAbility = "nothing";
+            sa = false;
+        }
+        else if (event.code === "KeyQ" && activeAbility === "nothing") {
             activeAbility = "shoot"; 
             sa = false;
         }
-        else if (event.key === "q" && activeAbility === "charging" ){
+        else if (event.code === "KeyQ" && activeAbility === "charging" ){
             shoot(event);
             sa = false;
         }
-        else if (event.key === "w") {
+        else if (event.code === "KeyW") {
             if(activeAbility === "shoot"){
                 activeAbility = "nothing";
             }
@@ -262,6 +267,26 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (sa) {
             secondAbility(mouseX, mouseY, enemy);
             sa = false;
+        }
+
+        
+        let pressed = abilties.clickedSpell(mouseX,mouseY);
+        if(!pressed){
+            return;
+        }
+        else if (pressed === "KeyQ" && activeAbility === "nothing") {
+            activeAbility = "shoot"; 
+            sa = false;
+        }
+        else if (pressed === "KeyQ" && activeAbility === "charging" ){
+            shoot(event);
+            sa = false;
+        }
+        else if (pressed === "KeyW") {
+            if(activeAbility === "shoot"){
+                activeAbility = "nothing";
+            }
+            sa = true;
         }
     });
     
